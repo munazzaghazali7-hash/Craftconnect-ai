@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CraftConnect AI - Artisan Portfolio Assistant</title>
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #ff9e44;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .navbar {
+            background-color: var(--primary);
+            padding: 1rem 2rem;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: #3a5a84;
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        
+        .output-preview {
+            background: var(--light);
+            border: 1px dashed #ccc;
+            border-radius: 8px;
+            padding: 1.5rem;
+            min-height: 200px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background: var(--secondary);
+            color: var(--dark);
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .banner-preview {
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .tab-container {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab.active {
+            border-bottom: 3px solid var(--primary);
+            font-weight: 600;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .social-idea {
+            background: var(--light);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>CraftConnect AI</h1>
+        <p>AI-powered portfolio & marketing assistant for artisans</p>
+    </div>
+    
+    <div class="container">
+        <div id="alert-area"></div>
+        
+        <div class="card">
+            <h2>Artisan Information</h2>
+            <div class="form-group">
+                <label for="artisan-name">Your Name/Business Name</label>
+                <input type="text" id="artisan-name" placeholder="e.g., Sarah's Handcrafted Pottery">
+            </div>
+            
+            <div class="form-group">
+                <label for="craft-type">Type of Craft</label>
+                <select id="craft-type">
+                    <option value="">Select your craft</option>
+                    <option value="pottery">Pottery & Ceramics</option>
+                    <option value="jewelry">Jewelry</option>
+                    <option value="textiles">Textiles & Weaving</option>
+                    <option value="wood">Woodworking</option>
+                    <option value="glass">Glass Art</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="artisan-description">Tell us about your craft</label>
+                <textarea id="artisan-description" rows="4" placeholder="Describe your artistic style, techniques, materials, and inspiration..."></textarea>
+            </div>
+            
+            <button class="btn" id="generate-btn" onclick="generateContent()">
+                Generate Portfolio & Marketing Ideas
+            </button>
+        </div>
+        
+        <div class="tab-container">
+            <div class="tab active" onclick="switchTab('portfolio')">Portfolio</div>
+            <div class="tab" onclick="switchTab('social')">Social Media Ideas</div>
+            <div class="tab" onclick="switchTab('descriptions')">Product Descriptions</div>
+            <div class="tab" onclick="switchTab('banners')">Ad Banners</div>
+            <div class="tab" onclick="switchTab('badges')">Badges</div>
+        </div>
+        
+        <div id="portfolio-tab" class="tab-content active">
+            <div class="card">
+                <h2>Generated Portfolio</h2>
+                <div class="output-preview" id="portfolio-output">
+                    <p>Your AI-generated portfolio will appear here after you provide your information and click the generate button.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="social-tab" class="tab-content">
+            <div class="card">
+                <h2>Social Media Post Ideas</h2>
+                <div id="social-output">
+                    <p>Your AI-generated social media ideas will appear here after you provide your information and click the generate button.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="descriptions-tab" class="tab-content">
+            <div class="card">
+                <h2>Product Description Examples</h2>
+                <div id="descriptions-output">
+                    <p>Your AI-generated product descriptions will appear here after you provide your information and click the generate button.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="banners-tab" class="tab-content">
+            <div class="card">
+                <h2>Ad Banner Examples</h2>
+                <div id="banners-output">
+                    <p>Your AI-generated ad banners will appear here after you provide your information and click the generate button.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="badges-tab" class="tab-content">
+            <div class="card">
+                <h2>Recommended Badges</h2>
+                <div id="badges-output">
+                    <p>Your recommended badges will appear here after you provide your information and click the generate button.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showAlert(message, type) {
+            const alertArea = document.getElementById('alert-area');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            alertArea.appendChild(alert);
+            
+            // Remove alert after 5 seconds
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+        
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Deactivate all tab buttons
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Activate selected tab
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            
+            // Activate the clicked tab button
+            event.currentTarget.classList.add('active');
+        }
+        
+        function generateContent() {
+            const name = document.getElementById('artisan-name').value;
+            const craftType = document.getElementById('craft-type').value;
+            
+            if (!name || !craftType) {
+                showAlert('Please provide at least your name and craft type', 'error');
+                return;
+            }
+            
+            const description = document.getElementById('artisan-description').value;
+            
+            const generateBtn = document.getElementById('generate-btn');
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = '<div class="loading"></div> Generating...';
+            
+            // Send request to backend
+            fetch('/api/generate-content', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: name,
+                    craft_type: craftType,
+                    description: description
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                // Update portfolio
+                document.getElementById('portfolio-output').innerHTML = `
+                    <h3>${name} Portfolio</h3>
+                    <p>${data.portfolio.replace(/\n/g, '<br>')}</p>
+                    
+                    <h4>Artisan Badges</h4>
+                    <div>
+                        ${data.badges.map(badge => `<span class="badge">${badge}</span>`).join('')}
+                    </div>
+                `;
+                
+                // Update social ideas
+                if (data.social_ideas && data.social_ideas.length > 0) {
+                    document.getElementById('social-output').innerHTML = data.social_ideas.map(idea => `
+                        <div class="social-idea">
+                            <h4>${idea.title || 'Social Media Idea'}</h4>
+                            <p>${idea.content || ''}</p>
+                            <p><strong>Hashtags:</strong> ${idea.hashtags || ''}</p>
+                        </div>
+                    `).join('');
+                } else {
+                    document.getElementById('social-output').innerHTML = '<p>No social media ideas generated.</p>';
+                }
+                
+                // Update product descriptions
+                if (data.product_descriptions && data.product_descriptions.length > 0) {
+                    document.getElementById('descriptions-output').innerHTML = data.product_descriptions.map(desc => `
+                        <div class="social-idea">
+                            <p>${desc}</p>
+                        </div>
+                    `).join('');
+                } else {
+                    document.getElementById('descriptions-output').innerHTML = '<p>No product descriptions generated.</p>';
+                }
+                
+                // Update banners
+                if (data.banners && data.banners.length > 0) {
+                    document.getElementById('banners-output').innerHTML = data.banners.map(banner => `
+                        <div class="banner-preview">
+                            ${banner}
+                        </div>
+                    `).join('');
+                } else {
+                    document.getElementById('banners-output').innerHTML = '<p>No banners generated.</p>';
+                }
+                
+                // Update badges
+                if (data.badges && data.badges.length > 0) {
+                    document.getElementById('badges-output').innerHTML = `
+                        <div>
+                            ${data.badges.map(badge => `<span class="badge">${badge}</span>`).join('')}
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('badges-output').innerHTML = '<p>No badges generated.</p>';
+                }
+                
+                showAlert('Content generated successfully!', 'success');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showAlert('Failed to generate content. Please try again.', 'error');
+            })
+            .finally(() => {
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = 'Generate Portfolio & Marketing Ideas';
+            });
+        }
+    </script>
+</body>
+</html>
