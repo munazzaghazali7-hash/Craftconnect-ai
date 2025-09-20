@@ -10,18 +10,15 @@ app = Flask(__name__)
 CORS(app)
 
 # Example route
-@app.route("/")
-def home():
-    return "CraftConnect-AI is live!"
+#@app.route("/")
+#def home():
+ #   return "CraftConnect-AI is live!"
 
 # Other routes below
 # ...
 
 # Run the app
-if __name__ == "__main__":
-    import os
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+
 
 # Mock data for demonstration
 SAMPLE_BADGES = [
@@ -184,5 +181,7 @@ def select_relevant_badges(craft_type, description):
     # Ensure we don't have duplicates
     return list(set(selected))
 
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+if __name__ == "__main__":
+    import os
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
