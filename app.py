@@ -2,6 +2,11 @@ from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import random
 from datetime import datetime
+import os
+
+port = int(os.environ.get("PORT", 5000))  # use Render's port, default to 5000 locally
+app.run(host="0.0.0.0", port=port)
+
 
 app = Flask(__name__)
 CORS(app)
